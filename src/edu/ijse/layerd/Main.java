@@ -4,6 +4,9 @@
  */
 package edu.ijse.layerd;
 
+import edu.ijse.layerd.view.ItemForm;
+import edu.ijse.layerd.view.OrderForm;
+
 /**
  *
  * @author Anjana
@@ -14,7 +17,8 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.out.println("Hello");
+        new ItemForm().setVisible(true);
+        new OrderForm().setVisible(true);
     }
     
 }
