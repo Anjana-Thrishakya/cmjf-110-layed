@@ -4,7 +4,7 @@
  */
 package edu.ijse.layerd.service;
 
-import edu.ijse.layerd.service.custom.CustomerServiceImpl;
+import edu.ijse.layerd.service.custom.impl.CustomerServiceImpl;
 import edu.ijse.layerd.service.custom.impl.ItemServiceImpl;
 
 /**

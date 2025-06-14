@@ -2,12 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package edu.ijse.layerd.service.custom;
+package edu.ijse.layerd.service.custom.impl;
 
 import edu.ijse.layerd.dao.DaoFactory;
 import edu.ijse.layerd.dao.custom.CustomerDao;
 import edu.ijse.layerd.dto.CustomerDto;
 import edu.ijse.layerd.entity.CustomerEntity;
+import edu.ijse.layerd.service.custom.CustomerService;
 import java.util.ArrayList;
 
 /**
