@@ -4,6 +4,13 @@
  */
 package edu.ijse.layerd.view;
 
+import edu.ijse.layerd.controller.CustomerController;
+import edu.ijse.layerd.controller.ItemController;
+import edu.ijse.layerd.controller.OrderController;
+import edu.ijse.layerd.dto.CustomerDto;
+import edu.ijse.layerd.dto.ItemDto;
+import edu.ijse.layerd.dto.OrderDetailDto;
+import edu.ijse.layerd.dto.OrderDto;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,6 +22,12 @@ import javax.swing.table.DefaultTableModel;
  * @author Anjana
  */
 public class OrderForm extends javax.swing.JFrame {
+    
+    private ItemController itemController = new ItemController();
+    private OrderController orderController = new OrderController();
+    private CustomerController customerController = new CustomerController();
+    
+    private ArrayList<OrderDetailDto> orderDetailDtos = new ArrayList<>();
 
     /**
      * Creates new form OrderForm
@@ -214,19 +227,19 @@ public class OrderForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCustSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCustSearchActionPerformed
-
+        searchCustomer();
     }//GEN-LAST:event_btnCustSearchActionPerformed
 
     private void btnSearchItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchItemActionPerformed
-
+        searchItem();
     }//GEN-LAST:event_btnSearchItemActionPerformed
 
     private void btnAddToTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddToTableActionPerformed
-
+        addToCart();
     }//GEN-LAST:event_btnAddToTableActionPerformed
 
     private void btnPlaceOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlaceOrderActionPerformed
-
+        placeOrder();
     }//GEN-LAST:event_btnPlaceOrderActionPerformed
 
     /**
@@ -302,5 +315,64 @@ public class OrderForm extends javax.swing.JFrame {
         txtDiscount.setText("");
         txtQty.setText("");
         lblItemData.setText("");
+    }
+
+    private void searchCustomer() {
+        try {
+            CustomerDto customerDto = customerController.searchCustomer(txtCustId.getText());
+            if(customerDto != null){
+                lblCustData.setText(customerDto.getTitle() + " " + customerDto.getName());
+            } else {
+                lblCustData.setText("Customer Not Found");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
+    
+    private void searchItem() {
+        try {
+            ItemDto itemDto = itemController.searchItem(txtItemCode.getText());
+            if(itemDto != null){
+                lblItemData.setText(itemDto.getDesc() + " | " + itemDto.getPack() + " " + itemDto.getQoh() + " | " + itemDto.getUnitPrice());
+            } else {
+                lblItemData.setText("Item Not Found");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+            
+        }
+    }
+    
+    private void addToCart() {
+        OrderDetailDto orderDetailDto = new OrderDetailDto();
+        orderDetailDto.setDiscount(Integer.parseInt(txtDiscount.getText()));
+        orderDetailDto.setQty(Integer.parseInt(txtQty.getText()));
+        orderDetailDto.setItemCode(txtItemCode.getText());
+        
+        orderDetailDtos.add(orderDetailDto);
+        
+        DefaultTableModel dtm = (DefaultTableModel) tblCart.getModel();
+        Object[] rowData = {orderDetailDto.getItemCode(), orderDetailDto.getQty(), orderDetailDto.getDiscount()};
+        dtm.addRow(rowData);
+        
+        clearItem();
+    }
+
+    private void placeOrder() {
+        OrderDto orderDto = new OrderDto();
+        orderDto.setCutomerId(txtCustId.getText());
+        orderDto.setOrderId(txtId.getText());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String curDateStr = sdf.format(new Date());
+        orderDto.setDate(curDateStr);
+        orderDto.setOrderDetailDtos(orderDetailDtos);
+        
+        try {
+            String resp = orderController.placeOrder(orderDto);
+            JOptionPane.showMessageDialog(this, resp);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
     }
 }
