@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author Anjana
  */
-public interface CurdDao<T, ID> extends SuperDao{
+public interface CrudDao<T, ID> extends SuperDao{
     boolean save(T t) throws Exception;
     boolean update(T t) throws Exception;
     boolean delete(ID id) throws Exception;
