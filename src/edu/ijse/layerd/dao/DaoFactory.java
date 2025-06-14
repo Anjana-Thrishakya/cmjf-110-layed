@@ -4,6 +4,8 @@
  */
 package edu.ijse.layerd.dao;
 
+import edu.ijse.layerd.dao.custom.impl.ItemDaoImpl;
+
 /**
  *
  * @author Anjana
@@ -23,7 +25,7 @@ public class DaoFactory {
     public SuperDao getDao(DaoTypes type){
         switch (type) {
             case ITEM:
-                return null;
+                return new ItemDaoImpl();
             case CUSTOMER:
                 return null;
             case ORDER:

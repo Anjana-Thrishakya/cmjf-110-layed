@@ -259,6 +259,8 @@ public class ItemForm extends javax.swing.JFrame {
             }  
         };
         
+        tblItem.setModel(dtm);
+        
         try {
             ArrayList<ItemDto> itemDtos = itemController.getAllItem();
             if(itemDtos != null){

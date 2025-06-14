@@ -4,9 +4,11 @@
  */
 package edu.ijse.layerd.dao.custom.impl;
 
+import edu.ijse.layerd.dao.CrudUtil;
 import edu.ijse.layerd.dao.custom.ItemDao;
 import edu.ijse.layerd.entity.ItemEntity;
 import java.util.ArrayList;
+import java.sql.ResultSet;
 
 /**
  *
@@ -16,27 +18,46 @@ public class ItemDaoImpl implements ItemDao{
 
     @Override
     public boolean save(ItemEntity t) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return CrudUtil.executeUpdate("INSERT INTO Item VALUES (?,?,?,?,?)",
+                t.getCode(), t.getDesc(), t.getPack(), t.getUnitPrice(), t.getQoh());
     }
 
     @Override
     public boolean update(ItemEntity t) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return CrudUtil.executeUpdate("UPDATE Item SET Description = ?, PackSize = ?, UnitPrice = ?, QtyOnHand = ? WHERE ItemCode = ?", 
+                t.getDesc(), t.getPack(), t.getUnitPrice(), t.getQoh(), t.getCode());
     }
 
     @Override
     public boolean delete(String id) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return CrudUtil.executeUpdate("DELETE FROM Item WHERE ItemCode = ?", id);
     }
 
     @Override
     public ItemEntity search(String id) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        ResultSet rst = CrudUtil.executeQuery("SELECT * FROM Item WHERE ItemCode = ?", id);
+        if(rst.next()){
+            return new ItemEntity(rst.getString("ItemCode"),
+                    rst.getString("Description"), 
+                    rst.getString("PackSize"),
+                    rst.getDouble("UnitPrice"),
+                    rst.getInt("QtyOnHand"));
+        }
+        return null;
     }
 
     @Override
     public ArrayList<ItemEntity> getALL() throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+         ResultSet rst = CrudUtil.executeQuery("SELECT * FROM Item");
+         ArrayList<ItemEntity> itemEntitys = new ArrayList<>();
+         while (rst.next()) {            
+            itemEntitys.add(new ItemEntity(rst.getString("ItemCode"),
+                    rst.getString("Description"), 
+                    rst.getString("PackSize"),
+                    rst.getDouble("UnitPrice"),
+                    rst.getInt("QtyOnHand")));
+        }
+         return itemEntitys;
     }
     
 }

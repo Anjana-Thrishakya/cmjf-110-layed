@@ -13,7 +13,7 @@ import java.sql.ResultSet;
  *
  * @author Anjana
  */
-public class CurdUtil {
+public class CrudUtil {
     
     private static PreparedStatement getPreparedStatement(String sql, Object... args) throws Exception{
         Connection connection = DBConnection.getInstance().getConnection();
