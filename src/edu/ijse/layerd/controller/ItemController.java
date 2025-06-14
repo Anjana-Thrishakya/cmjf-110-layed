@@ -5,6 +5,8 @@
 package edu.ijse.layerd.controller;
 
 import edu.ijse.layerd.dto.ItemDto;
+import edu.ijse.layerd.service.ServiceFactory;
+import edu.ijse.layerd.service.custom.ItemService;
 import java.util.ArrayList;
 
 /**
@@ -12,24 +14,27 @@ import java.util.ArrayList;
  * @author Anjana
  */
 public class ItemController {
+    
+    private ItemService itemService = (ItemService) ServiceFactory.getInstance().getService(ServiceFactory.ServiceType.ITEM);
+    
     public String saveItem(ItemDto itemDto) throws Exception{
-        return "Success";
+        return itemService.saveItem(itemDto);
     }
     
     public String updateItem(ItemDto itemDto) throws Exception{
-        return "Success";
+        return itemService.updateItem(itemDto);
     }
     
     public String deleteItem(String code) throws Exception{
-        return "Success";
+        return itemService.deleteItem(code);
     }
     
     public ItemDto searchItem(String code) throws Exception{
-        return null;
+        return itemService.searchItem(code);
     }
     
     public ArrayList<ItemDto> getAllItem() throws Exception{
-        return null;
+        return itemService.getAllItem();
     }
     
     

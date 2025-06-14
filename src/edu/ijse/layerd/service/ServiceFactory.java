@@ -4,6 +4,8 @@
  */
 package edu.ijse.layerd.service;
 
+import edu.ijse.layerd.service.custom.impl.ItemServiceImpl;
+
 /**
  *
  * @author Anjana
@@ -24,7 +26,7 @@ public class ServiceFactory {
     public SuperService getService(ServiceType type){
         switch (type) {
             case ITEM:
-                return null;
+                return new ItemServiceImpl();
             case CUSTOMER:
                 return null;
             case ORDER:
