@@ -4,6 +4,7 @@
  */
 package edu.ijse.layerd.view;
 
+import edu.ijse.layerd.controller.ItemController;
 import edu.ijse.layerd.dto.ItemDto;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -15,6 +16,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class ItemForm extends javax.swing.JFrame {
    
+    private ItemController itemController = new ItemController();
 
     /**
      * Creates new form ItemForm
@@ -203,19 +205,19 @@ public class ItemForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        
+        saveItem();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void tblItemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblItemMouseClicked
-        
+        searchItem();
     }//GEN-LAST:event_tblItemMouseClicked
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        
+        updateItem();
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        
+        deleteItem();
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     /**
@@ -258,12 +260,78 @@ public class ItemForm extends javax.swing.JFrame {
         };
         
         try {
-            ArrayList<ItemDto> itemDtos = null;
+            ArrayList<ItemDto> itemDtos = itemController.getAllItem();
             if(itemDtos != null){
                 for (ItemDto itemDto : itemDtos) {
                     Object[] rowData = {itemDto.getCode(), itemDto.getDesc(), itemDto.getPack(), itemDto.getUnitPrice(), itemDto.getQoh()};
                     dtm.addRow(rowData);
                 }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
+
+    private void saveItem() {
+        ItemDto itemDto = new ItemDto(
+                txtCode.getText(),
+                txtDesc.getText(), 
+                txtPack.getText(), 
+                Double.parseDouble(txtUnit.getText()),
+                Integer.parseInt(txtQoh.getText()));
+        
+        try {
+            String resp = itemController.saveItem(itemDto);
+            JOptionPane.showMessageDialog(this, resp);
+            loadTable();
+            clear();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
+
+    private void updateItem() {
+        ItemDto itemDto = new ItemDto(
+                txtCode.getText(),
+                txtDesc.getText(), 
+                txtPack.getText(), 
+                Double.parseDouble(txtUnit.getText()),
+                Integer.parseInt(txtQoh.getText()));
+        
+        try {
+            String resp = itemController.updateItem(itemDto);
+            JOptionPane.showMessageDialog(this, resp);
+            loadTable();
+            clear();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
+
+    private void deleteItem() {
+        try {
+            String resp = itemController.deleteItem(txtCode.getText());
+            JOptionPane.showMessageDialog(this, resp);
+            loadTable();
+            clear();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
+
+    private void searchItem() {
+        String code = (String) tblItem.getValueAt(tblItem.getSelectedRow(), 0);
+        
+        try {
+            ItemDto itemDto = itemController.searchItem(code);
+            if(itemDto != null){
+                txtCode.setText(itemDto.getCode());
+                txtDesc.setText(itemDto.getDesc());
+                txtPack.setText(itemDto.getPack());
+                txtQoh.setText(itemDto.getQoh().toString());
+                txtUnit.setText(itemDto.getUnitPrice().toString());
+            } else {
+                JOptionPane.showMessageDialog(this, "Item Not Found");
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
