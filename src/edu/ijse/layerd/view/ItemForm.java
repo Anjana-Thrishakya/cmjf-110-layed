@@ -4,6 +4,7 @@
  */
 package edu.ijse.layerd.view;
 
+import edu.ijse.layerd.dto.ItemDto;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -13,12 +14,14 @@ import javax.swing.table.DefaultTableModel;
  * @author Anjana
  */
 public class ItemForm extends javax.swing.JFrame {
+   
 
     /**
      * Creates new form ItemForm
      */
     public ItemForm() {
         initComponents();
+        loadTable();
     }
 
     /**
@@ -244,5 +247,26 @@ public class ItemForm extends javax.swing.JFrame {
         txtPack.setText("");
         txtQoh.setText("");
         txtUnit.setText("");
+    }
+
+    private void loadTable() {
+        String columns[] = {"Item Code", "Description", "Pack Size", "Unit Price", "Qty On Hand"};
+        DefaultTableModel dtm = new DefaultTableModel(columns, 0){
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }  
+        };
+        
+        try {
+            ArrayList<ItemDto> itemDtos = null;
+            if(itemDtos != null){
+                for (ItemDto itemDto : itemDtos) {
+                    Object[] rowData = {itemDto.getCode(), itemDto.getDesc(), itemDto.getPack(), itemDto.getUnitPrice(), itemDto.getQoh()};
+                    dtm.addRow(rowData);
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
     }
 }
